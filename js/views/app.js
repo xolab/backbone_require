@@ -6,8 +6,9 @@ define([
 	'collections/todos',
 	'views/todos',
 	'text!templates/stats.html',
-	'common'
-], function ($, _, Backbone, Todos, TodoView, statsTemplate, Common) {
+	'common',
+	'reactLib'
+], function ($, _, Backbone, Todos, TodoView, statsTemplate, Common, reactLib) {
 	'use strict';
 
 	// Our overall **AppView** is the top-level piece of UI.
@@ -49,6 +50,7 @@ define([
 		// Re-rendering the App just means refreshing the statistics -- the rest
 		// of the app doesn't change.
 		render: function () {
+			var reactRootElement = document.getElementById('react-root');
 			var completed = Todos.completed().length;
 			var remaining = Todos.remaining().length;
 
@@ -71,6 +73,16 @@ define([
 			}
 
 			this.allCheckbox.checked = !remaining;
+
+			this.unmountReactRoot = reactLib.mountRoot(reactRootElement, {
+				test: '1324 test'
+			});
+			
+			setTimeout(() => {
+				this.unmountReactRoot = reactLib.mountRoot(reactRootElement, {
+					test: '!!!!! test'
+				});
+			}, 3000);
 		},
 
 		// Add a single todo item to the list by creating a view for it, and
